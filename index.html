@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Егор Горячев · zerraara — AI-автоматизация &amp; performance-маркетинг</title>
+<meta name="description" content="Маркетолог, который не заказывает автоматизацию, а собирает её сам через AI и no-code. n8n, LLM, Telegram-боты, воронки и контент под ключ.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#14110D;
+    --panel:#1C1813;
+    --panel-2:#241F18;
+    --line:#332C22;
+    --amber:#FFB000;      /* phosphor amber — signature */
+    --ember:#FF6B35;      /* hot accent */
+    --live:#6FE7B7;       /* cool "active" pulse, used sparingly */
+    --bone:#ECE3D2;
+    --ash:#8C8272;
+    --ash-dim:#5F584C;
+    --display:'Bricolage Grotesque', sans-serif;
+    --body:'Inter', sans-serif;
+    --mono:'JetBrains Mono', monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--ink);color:var(--bone);font-family:var(--body);
+    line-height:1.5;overflow-x:hidden;
+    background-image:radial-gradient(1200px 600px at 78% -8%, rgba(255,176,0,.06), transparent 60%),
+                     radial-gradient(900px 500px at 6% 108%, rgba(255,107,53,.05), transparent 55%);
+  }
+  ::selection{background:var(--amber);color:var(--ink)}
+  a{color:inherit;text-decoration:none}
+
+  /* ---- boot overlay ---- */
+  #boot{position:fixed;inset:0;z-index:100;background:var(--ink);
+    display:flex;align-items:center;justify-content:center;
+    font-family:var(--mono);font-size:13px;color:var(--ash);
+    transition:opacity .5s ease, transform .5s ease}
+  #boot .lines{max-width:520px;width:88%;padding:0 20px}
+  #boot .l{opacity:0;white-space:pre-wrap}
+  #boot .l.on{opacity:1}
+  #boot .ok{color:var(--live)}
+  #boot .am{color:var(--amber)}
+  #boot.done{opacity:0;transform:translateY(-14px);pointer-events:none}
+
+  /* ---- top bar ---- */
+  header.bar{position:fixed;top:0;left:0;right:0;z-index:40;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 24px;font-family:var(--mono);font-size:12px;
+    background:linear-gradient(var(--ink),rgba(20,17,13,.4) 70%,transparent);
+    backdrop-filter:blur(2px)}
+  .bar .brand{color:var(--amber);font-weight:700;letter-spacing:.06em}
+  .bar .clock{color:var(--ash);letter-spacing:.04em}
+  .bar nav{display:flex;gap:18px}
+  .bar nav a{color:var(--ash);letter-spacing:.05em;transition:color .2s}
+  .bar nav a:hover,.bar nav a:focus-visible{color:var(--bone)}
+  @media(max-width:720px){.bar nav{display:none}.bar .clock{display:none}}
+
+  .wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+
+  /* ---- hero ---- */
+  .hero{min-height:100vh;display:grid;grid-template-columns:1.15fr .85fr;
+    align-items:center;gap:32px;padding-top:70px}
+  .eyebrow{font-family:var(--mono);font-size:12.5px;letter-spacing:.14em;
+    color:var(--ember);text-transform:uppercase;margin-bottom:22px}
+  .status{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);
+    font-size:12px;letter-spacing:.08em;color:var(--live);
+    border:1px solid var(--line);border-radius:100px;padding:6px 13px;margin-bottom:26px}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--live);
+    box-shadow:0 0 0 0 rgba(111,231,183,.6);animation:beat 2.4s infinite}
+  @keyframes beat{0%{box-shadow:0 0 0 0 rgba(111,231,183,.55)}70%{box-shadow:0 0 0 10px rgba(111,231,183,0)}100%{box-shadow:0 0 0 0 rgba(111,231,183,0)}}
+  h1{font-family:var(--display);font-weight:800;line-height:.94;
+    font-size:clamp(46px,8.5vw,104px);letter-spacing:-.02em;margin-bottom:8px}
+  h1 .last{color:var(--amber)}
+  .handle{font-family:var(--mono);color:var(--ash);font-size:14px;
+    letter-spacing:.06em;margin-bottom:26px}
+  .lede{font-size:clamp(18px,2.4vw,23px);max-width:30ch;color:var(--bone);margin-bottom:14px}
+  .lede b{color:var(--amber);font-weight:600}
+  .sub{color:var(--ash);max-width:44ch;margin-bottom:32px;font-size:15.5px}
+  .cta{display:flex;gap:14px;flex-wrap:wrap}
+  .btn{font-family:var(--mono);font-size:13px;letter-spacing:.04em;
+    padding:13px 20px;border-radius:10px;border:1px solid var(--line);
+    transition:transform .15s, background .2s, border-color .2s, color .2s;display:inline-flex;gap:8px;align-items:center}
+  .btn.primary{background:var(--amber);color:var(--ink);border-color:var(--amber);font-weight:700}
+  .btn.primary:hover,.btn.primary:focus-visible{background:var(--ember);border-color:var(--ember);transform:translateY(-2px)}
+  .btn.ghost:hover,.btn.ghost:focus-visible{border-color:var(--amber);color:var(--amber);transform:translateY(-2px)}
+
+  /* ---- hero flow graph ---- */
+  .flow{position:relative;height:440px;align-self:center}
+  .flow svg{width:100%;height:100%;overflow:visible}
+  .node-lbl{font-family:var(--mono);font-size:10.5px;fill:var(--ash);letter-spacing:.03em}
+  .node-core{fill:var(--panel-2);stroke:var(--line);stroke-width:1.5}
+  .node-core.hot{stroke:var(--amber)}
+  .wire{fill:none;stroke:var(--line);stroke-width:1.6}
+  .wire.live{stroke:rgba(255,176,0,.35)}
+  @media(max-width:900px){.hero{grid-template-columns:1fr}.flow{display:none}}
+
+  /* ---- sections ---- */
+  section{padding:96px 0;border-top:1px solid var(--line)}
+  .sec-head{font-family:var(--mono);font-size:12.5px;letter-spacing:.14em;
+    color:var(--ember);text-transform:uppercase;margin-bottom:10px}
+  .sec-title{font-family:var(--display);font-weight:800;font-size:clamp(28px,5vw,46px);
+    letter-spacing:-.015em;margin-bottom:34px;line-height:1.02}
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity .6s ease, transform .6s ease}
+  .reveal.in{opacity:1;transform:none}
+
+  .about p{font-size:clamp(17px,2.3vw,21px);max-width:60ch;color:var(--bone)}
+  .about p b{color:var(--amber);font-weight:600}
+  .about .aside{font-family:var(--mono);font-size:13px;color:var(--ash);margin-top:22px;max-width:52ch}
+
+  /* ---- projects grid (nodes) ---- */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;
+    padding:22px 22px 20px;position:relative;overflow:hidden;
+    transition:transform .18s, border-color .2s}
+  .card::before{content:"";position:absolute;left:0;top:0;height:100%;width:3px;
+    background:var(--line);transition:background .2s}
+  .card:hover{transform:translateY(-4px);border-color:#4a4030}
+  .card:hover::before{background:var(--amber)}
+  .card .idx{font-family:var(--mono);font-size:11px;color:var(--ash-dim);letter-spacing:.06em}
+  .card h3{font-family:var(--display);font-weight:600;font-size:20px;margin:6px 0 8px;letter-spacing:-.01em}
+  .card p{font-size:14.5px;color:var(--ash);margin-bottom:16px}
+  .tags{display:flex;flex-wrap:wrap;gap:6px}
+  .tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.03em;color:var(--amber);
+    border:1px solid var(--line);border-radius:6px;padding:3px 8px;background:rgba(255,176,0,.04)}
+
+  /* ---- pipeline / experience ---- */
+  .track{position:relative;padding-left:26px}
+  .track::before{content:"";position:absolute;left:5px;top:6px;bottom:6px;width:2px;
+    background:linear-gradient(var(--amber),var(--ember),transparent)}
+  .stop{position:relative;padding-bottom:40px}
+  .stop:last-child{padding-bottom:0}
+  .stop::before{content:"";position:absolute;left:-26px;top:5px;width:12px;height:12px;
+    border-radius:50%;background:var(--ink);border:2px solid var(--amber)}
+  .stop .role{font-family:var(--display);font-weight:600;font-size:20px;letter-spacing:-.01em}
+  .stop .org{font-family:var(--mono);font-size:12.5px;color:var(--ember);letter-spacing:.04em;margin:3px 0 9px}
+  .stop p{color:var(--ash);max-width:60ch;font-size:15px}
+
+  /* ---- stack ---- */
+  .specs{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+  .spec{border:1px solid var(--line);border-radius:12px;padding:18px;background:var(--panel)}
+  .spec .k{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--ash);text-transform:uppercase;margin-bottom:10px}
+  .spec .v{font-size:15px;color:var(--bone);line-height:1.7}
+  .spec .v span{color:var(--amber)}
+
+  /* ---- offbeat ---- */
+  .offbeat{font-family:var(--mono);font-size:14px;color:var(--ash);letter-spacing:.02em}
+  .offbeat b{color:var(--bone);font-weight:500}
+
+  /* ---- footer / cta ---- */
+  .foot{text-align:center;padding:110px 0 90px}
+  .foot .big{font-family:var(--display);font-weight:800;font-size:clamp(30px,6vw,60px);
+    letter-spacing:-.02em;line-height:1.02;margin-bottom:14px}
+  .foot .big span{color:var(--amber)}
+  .foot .fsub{color:var(--ash);margin-bottom:34px;font-size:16px}
+  .contacts{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:40px}
+  .meta{font-family:var(--mono);font-size:11px;color:var(--ash-dim);letter-spacing:.06em}
+
+  :focus-visible{outline:2px solid var(--amber);outline-offset:3px;border-radius:4px}
+
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+    .reveal{opacity:1;transform:none}
+    #boot{display:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- boot -->
+<div id="boot" aria-hidden="true"><div class="lines">
+  <div class="l">$ запуск профиля zerraara …</div>
+  <div class="l"><span class="ok">✔</span> performance-маркетинг &nbsp;<span class="ok">online</span></div>
+  <div class="l"><span class="ok">✔</span> n8n-автоматизации &nbsp;<span class="ok">активны</span></div>
+  <div class="l"><span class="ok">✔</span> AI-модели · claude / gemini &nbsp;<span class="ok">подключены</span></div>
+  <div class="l"><span class="am">▲</span> статус: <span class="am">открыт к работе</span></div>
+</div></div>
+
+<header class="bar">
+  <div class="brand">zerraara.exe</div>
+  <div class="clock" id="clock">--:--:--</div>
+  <nav>
+    <a href="#about">система</a>
+    <a href="#work">проекты</a>
+    <a href="#exp">опыт</a>
+    <a href="#stack">навыки</a>
+    <a href="#contact">связь</a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+  <!-- HERO -->
+  <section class="hero" style="border-top:none">
+    <div class="hero-txt">
+      <div class="eyebrow">// performance-маркетинг × ai-автоматизация</div>
+      <div class="status"><span class="dot"></span>В СЕТИ — принимаю задачи</div>
+      <h1>ЕГОР<br><span class="last">ГОРЯЧЕВ</span></h1>
+      <div class="handle">@omwtsyg · МГУ ВШБ, менеджмент</div>
+      <p class="lede">Маркетолог, который не <b>заказывает</b> автоматизацию, а <b>собирает её сам</b>.</p>
+      <p class="sub">Гоню трафик и лиды на дорогой продукт — и тут же собираю ботов, воронки и контент-конвейеры, которые делают это за меня. От задачи до работающего результата.</p>
+      <div class="cta">
+        <a class="btn primary" href="https://t.me/omwtsyg">→ Написать в Telegram</a>
+        <a class="btn ghost" href="#work">Смотреть проекты ↓</a>
+      </div>
+    </div>
+
+    <!-- signature: career as an n8n-style flow -->
+    <div class="flow" aria-hidden="true">
+      <svg viewBox="0 0 420 440" role="img">
+        <defs>
+          <circle id="pulse" r="3.4" fill="#FFB000"/>
+        </defs>
+        <!-- wires -->
+        <path class="wire live" d="M70,70 C150,70 150,160 210,160"/>
+        <path class="wire live" d="M70,70 C150,70 150,300 210,300"/>
+        <path class="wire live" d="M210,160 C280,160 280,220 350,220"/>
+        <path class="wire live" d="M210,300 C280,300 280,220 350,220"/>
+        <path class="wire" d="M70,70 C120,70 120,400 210,400"/>
+        <path class="wire live" d="M210,400 C300,400 300,220 350,220"/>
+
+        <!-- traveling pulses -->
+        <use href="#pulse"><animateMotion dur="2.6s" repeatCount="indefinite" path="M70,70 C150,70 150,160 210,160"/></use>
+        <use href="#pulse" fill="#FF6B35"><animateMotion dur="3.1s" begin="0.6s" repeatCount="indefinite" path="M70,70 C150,70 150,300 210,300"/></use>
+        <use href="#pulse"><animateMotion dur="2.2s" begin="1.1s" repeatCount="indefinite" path="M210,160 C280,160 280,220 350,220"/></use>
+        <use href="#pulse" fill="#6FE7B7"><animateMotion dur="2.8s" begin="0.3s" repeatCount="indefinite" path="M210,300 C280,300 280,220 350,220"/></use>
+
+        <!-- nodes -->
+        <g>
+          <rect class="node-core hot" x="34" y="52" width="72" height="36" rx="9"/>
+          <text class="node-lbl" x="70" y="74" text-anchor="middle">ТРАФИК</text>
+        </g>
+        <g>
+          <rect class="node-core" x="176" y="142" width="72" height="36" rx="9"/>
+          <text class="node-lbl" x="212" y="164" text-anchor="middle">СБОР</text>
+        </g>
+        <g>
+          <rect class="node-core" x="176" y="282" width="72" height="36" rx="9"/>
+          <text class="node-lbl" x="212" y="304" text-anchor="middle">AI</text>
+        </g>
+        <g>
+          <rect class="node-core" x="176" y="382" width="72" height="36" rx="9"/>
+          <text class="node-lbl" x="212" y="404" text-anchor="middle">БОТ</text>
+        </g>
+        <g>
+          <rect class="node-core hot" x="316" y="202" width="72" height="36" rx="9"/>
+          <text class="node-lbl" x="352" y="224" text-anchor="middle">ЛИД → CRM</text>
+        </g>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="about">
+    <div class="sec-head reveal">// система</div>
+    <h2 class="sec-title reveal">Один человек — целый отдел</h2>
+    <p class="reveal">Лил <b>performance-трафик и лиды на премиальную недвижимость Москвы</b> — там, где цена ошибки в связке измеряется миллионами. Параллельно разбирал рутину на части и собирал под неё автоматизации: <b>Telegram-боты, n8n-сценарии, сбор данных, связки с AI</b>. В итоге на выходе не «кампания» и не разовый инструмент, а работающая система, где трафик, квалификация лида и CRM соединены в один поток.</p>
+    <p class="aside reveal">Люблю доводить сложное до рабочего результата. Без «сделаю потом».</p>
+  </section>
+
+  <!-- WORK -->
+  <section id="work">
+    <div class="sec-head reveal">// собрано</div>
+    <h2 class="sec-title reveal">Что уже собрано и работает</h2>
+    <div class="grid">
+
+      <div class="card reveal">
+        <div class="idx">01 / factory</div>
+        <h3>Видео-фабрика</h3>
+        <p>Конвейер коротких видео на n8n: тема → сценарий → озвучка → сборка ролика → выгрузка. Reels/TikTok без монтажёра.</p>
+        <div class="tags"><span class="tag">n8n</span><span class="tag">Groq</span><span class="tag">JSON2Video</span></div>
+      </div>
+
+      <div class="card reveal">
+        <div class="idx">02 / leadgen</div>
+        <h3>AI лид-финдер</h3>
+        <p>Веб-приложение: находит потенциальных клиентов, квалифицирует их через LLM и отдаёт готовый список под обзвон.</p>
+        <div class="tags"><span class="tag">AI</span><span class="tag">веб-инструмент</span></div>
+      </div>
+
+      <div class="card reveal">
+        <div class="idx">03 / pipeline</div>
+        <h3>Avito → Bitrix24</h3>
+        <p>Ловит нужные объявления и заявки с Avito и льёт лиды напрямую в воронку CRM. Работает 24/7.</p>
+        <div class="tags"><span class="tag">автоматизация</span><span class="tag">Bitrix24</span><span class="tag">24/7</span></div>
+      </div>
+
+      <div class="card reveal">
+        <div class="idx">04 / sales</div>
+        <h3>FunPay / Playerok агент</h3>
+        <p>Автопродавец цифровых товаров: сам отвечает покупателю, выдаёт заказ и закрывает сделку без участия человека.</p>
+        <div class="tags"><span class="tag">автоматизация</span><span class="tag">FunPay Pulse</span></div>
+      </div>
+
+      <div class="card reveal">
+        <div class="idx">05 / payments</div>
+        <h3>Эзотерик-бот</h3>
+        <p>Telegram-бот с приёмом оплаты через Telegram Stars — от контента до монетизации внутри мессенджера.</p>
+        <div class="tags"><span class="tag">Telegram</span><span class="tag">оплата Stars</span></div>
+      </div>
+
+      <div class="card reveal">
+        <div class="idx">06 / monitor</div>
+        <h3>ЕМИАС слот-монитор</h3>
+        <p>Мониторит окна записи к врачу и мгновенно пингует в Telegram, как только освобождается слот.</p>
+        <div class="tags"><span class="tag">мониторинг</span><span class="tag">Telegram</span></div>
+      </div>
+
+      <div class="card reveal">
+        <div class="idx">07 / advisor</div>
+        <h3>«Кожа» — скинкер-бот</h3>
+        <p>Бот-консультант: по вводным подбирает уход и разбирает состав средств. Диалог на базе AI.</p>
+        <div class="tags"><span class="tag">AI</span><span class="tag">Telegram</span></div>
+      </div>
+
+      <div class="card reveal">
+        <div class="idx">08 / affiliate</div>
+        <h3>WB-партнёрка</h3>
+        <p>Автоматизация партнёрской программы Wildberries: сбор, обработка и выгрузка данных без ручного труда.</p>
+        <div class="tags"><span class="tag">автоматизация</span><span class="tag">сбор данных</span></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="exp">
+    <div class="sec-head reveal">// воронка</div>
+    <h2 class="sec-title reveal">Опыт</h2>
+    <div class="track">
+      <div class="stop reveal">
+        <div class="role">Performance-маркетинг · премиум-недвижимость</div>
+        <div class="org">Москва · лидогенерация</div>
+        <p>Запуск и ведение трафика на дорогой продукт: связки, креативы, аналитика воронки в Bitrix24. Задача — стабильный поток квалифицированных лидов, а не просто клики. Есть отраслевые связи (Onycs Realty).</p>
+      </div>
+      <div class="stop reveal">
+        <div class="role">Руководство командой · процессы и обучение</div>
+        <div class="org">небольшой отдел · онбординг</div>
+        <p>Управлял небольшим отделом: выстраивал процессы, курировал людей по задачам, обучал с нуля и полностью вводил новичков в работу — от первого дня до самостоятельности. Не просто раздаю таски, а довожу человека до результата.</p>
+      </div>
+      <div class="stop reveal">
+        <div class="role">Видео-продакшн · Reels под маркетинг</div>
+        <div class="org">контент своими руками</div>
+        <p>Сам снимал и собирал вертикальные видео и Reels под маркетинговые задачи — от идеи до готового ролика. Понимаю продакшн изнутри, поэтому и автоматизирую его осознанно (см. видео-фабрику), а не наугад.</p>
+      </div>
+      <div class="stop reveal">
+        <div class="role">Маркетинг в крипте и tech-проектах</div>
+        <div class="org">УБТ-трафик · органика без бюджета</div>
+        <p>Раньше вёл маркетинг в криптовалютных и технологических проектах. Работал с УБТ (условно-бесплатным трафиком) — масштабная органика через контент, где результат тянешь руками и головой, а не откруткой бюджета.</p>
+      </div>
+      <div class="stop reveal">
+        <div class="role">Фриланс · автоматизация под ключ</div>
+        <div class="org">Telegram-боты · n8n · AI-интеграции</div>
+        <p>Полный цикл: снял задачу → спроектировал → собрал → запустил → передал заказчику. Работаю на связке n8n + AI-модели (Claude, Gemini) + готовые интеграции. На выходе — рабочая система, а не «демо».</p>
+      </div>
+      <div class="stop reveal">
+        <div class="role">Бакалавриат · Менеджмент</div>
+        <div class="org">МГУ им. Ломоносова · Высшая школа бизнеса</div>
+        <p>Учебная база в оценке бизнеса (DCF, WACC, модель Гордона) и цифровизации процессов. Плюс к прикладной части — понимание экономики за автоматизацией.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- STACK -->
+  <section id="stack">
+    <div class="sec-head reveal">// инструменты</div>
+    <h2 class="sec-title reveal">Чем работаю</h2>
+    <div class="specs">
+      <div class="spec reveal"><div class="k">Автоматизация</div><div class="v"><span>n8n</span> · сценарии · интеграции сервисов</div></div>
+      <div class="spec reveal"><div class="k">AI / нейросети</div><div class="v"><span>Claude</span> · Gemini · Groq · промптинг · AI-агенты</div></div>
+      <div class="spec reveal"><div class="k">Маркетинг</div><div class="v"><span>Performance</span> · лидоген · SMM · аналитика воронки</div></div>
+      <div class="spec reveal"><div class="k">Контент</div><div class="v"><span>Reels / видео</span> · продакшн своими руками</div></div>
+      <div class="spec reveal"><div class="k">CRM / данные</div><div class="v"><span>Bitrix24</span> · парсинг · аналитика · выгрузка</div></div>
+      <div class="spec reveal"><div class="k">Команда</div><div class="v"><span>Управление отделом</span> · онбординг · обучение процессам</div></div>
+      <div class="spec reveal"><div class="k">Продукт</div><div class="v"><span>Боты и веб-инструменты</span> под конкретную задачу</div></div>
+    </div>
+  </section>
+
+  <!-- OFFBEAT -->
+  <section>
+    <div class="sec-head reveal">// вне системы</div>
+    <p class="offbeat reveal"><b>Тёмная нишевая парфюмерия</b> (да, хоррор-ароматы) · <b>манга</b> · <b>игры</b> · <b>железо и сборки ПК</b>. Тот же принцип: капаться в деталях, пока не станет по-настоящему хорошо.</p>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="foot" style="border-top:1px solid var(--line)">
+    <div class="big reveal">Есть рутина, которую <span>жалко делать руками?</span></div>
+    <p class="fsub reveal">Соберу под неё систему. Или просто возьмусь за вашу задачу по маркетингу и автоматизации.</p>
+    <div class="contacts reveal">
+      <a class="btn primary" href="https://t.me/omwtsyg">Telegram · @omwtsyg</a>
+      <a class="btn ghost" href="mailto:ezdud@mail.ru">ezdud@mail.ru</a>
+      <a class="btn ghost" href="https://github.com/zerraxd7-byte">GitHub</a>
+    </div>
+    <div class="meta reveal">zerraara · Егор Горячев · обновлено: 2026</div>
+  </section>
+
+</main>
+
+<script>
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* live clock (Москва) */
+  var clock = document.getElementById('clock');
+  function tick(){
+    try{
+      var t = new Date().toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit',second:'2-digit',timeZone:'Europe/Moscow'});
+      clock.textContent = 'MSK ' + t;
+    }catch(e){ clock.textContent = new Date().toLocaleTimeString('ru-RU'); }
+  }
+  tick(); setInterval(tick,1000);
+
+  /* boot sequence */
+  var boot = document.getElementById('boot');
+  if(reduce){ if(boot) boot.remove(); }
+  else if(boot){
+    var lines = boot.querySelectorAll('.l');
+    lines.forEach(function(l,i){ setTimeout(function(){ l.classList.add('on'); }, 180*i + 120); });
+    setTimeout(function(){ boot.classList.add('done'); }, 180*lines.length + 650);
+    setTimeout(function(){ boot.remove(); }, 180*lines.length + 1250);
+  }
+
+  /* scroll reveal */
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
+  }, {threshold:.12, rootMargin:'0px 0px -6% 0px'});
+  document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+})();
+</script>
+</body>
+</html>
