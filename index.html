@@ -147,9 +147,13 @@
   .spec .v{font-size:15px;color:var(--bone);line-height:1.7}
   .spec .v span{color:var(--amber)}
 
-  /* ---- offbeat ---- */
-  .offbeat{font-family:var(--mono);font-size:14px;color:var(--ash);letter-spacing:.02em}
-  .offbeat b{color:var(--bone);font-weight:500}
+  /* ---- soft skills chips ---- */
+  .softs{display:flex;flex-wrap:wrap;gap:10px}
+  .chip{display:inline-flex;font-family:var(--mono);font-size:13px;letter-spacing:.02em;
+    color:var(--bone);border:1px solid var(--line);border-radius:100px;
+    padding:9px 16px;background:var(--panel);transition:border-color .2s,color .2s,transform .15s}
+  .chip:hover{border-color:var(--amber);color:var(--amber);transform:translateY(-2px)}
+  .chip.hot{border-color:var(--amber);color:var(--amber);background:rgba(255,176,0,.05)}
 
   /* ---- footer / cta ---- */
   .foot{text-align:center;padding:110px 0 90px}
@@ -335,7 +339,7 @@
       <div class="stop reveal">
         <div class="role">Performance-маркетинг · премиум-недвижимость</div>
         <div class="org">Москва · лидогенерация</div>
-        <p>Запуск и ведение трафика на дорогой продукт: связки, креативы, аналитика воронки в Bitrix24. Задача — стабильный поток квалифицированных лидов, а не просто клики. Есть отраслевые связи (Onycs Realty).</p>
+        <p>Запуск и ведение трафика на дорогой продукт: связки, креативы, аналитика воронки в Bitrix24. Задача — стабильный поток квалифицированных лидов, а не просто клики.</p>
       </div>
       <div class="stop reveal">
         <div class="role">Руководство командой · процессы и обучение</div>
@@ -380,10 +384,23 @@
     </div>
   </section>
 
-  <!-- OFFBEAT -->
-  <section>
-    <div class="sec-head reveal">// вне системы</div>
-    <p class="offbeat reveal"><b>Тёмная нишевая парфюмерия</b> (да, хоррор-ароматы) · <b>манга</b> · <b>игры</b> · <b>железо и сборки ПК</b>. Тот же принцип: капаться в деталях, пока не станет по-настоящему хорошо.</p>
+  <!-- SOFT SKILLS -->
+  <section id="soft">
+    <div class="sec-head reveal">// софт-скиллы</div>
+    <h2 class="sec-title reveal">Как со мной работать</h2>
+    <div class="softs reveal">
+      <span class="chip hot">Английский · C1</span>
+      <span class="chip hot">Готов пробовать новое</span>
+      <span class="chip">Управление людьми</span>
+      <span class="chip">Обучение и онбординг</span>
+      <span class="chip">Самостоятельность</span>
+      <span class="chip">Ответственность за результат</span>
+      <span class="chip">Коммуникация</span>
+      <span class="chip">Работа в команде</span>
+      <span class="chip">Быстрая обучаемость</span>
+      <span class="chip">Системное мышление</span>
+      <span class="chip">Внимание к деталям</span>
+    </div>
   </section>
 
   <!-- CONTACT -->
