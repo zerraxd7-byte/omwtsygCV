@@ -198,6 +198,16 @@
     html{scroll-behavior:auto}
   }
   :focus-visible{outline:3px solid var(--indigo);outline-offset:3px;border-radius:6px}
+
+  /* metrics band */
+  .metrics{background:var(--ink);color:var(--paper)}
+  .metrics-inner{display:flex;flex-wrap:wrap}
+  .metric{flex:1;min-width:180px;padding:30px 24px;border-right:1px solid rgba(255,255,255,.1)}
+  .metric:last-child{border-right:none}
+  .metric .num{font-family:'Unbounded',sans-serif;font-weight:800;font-size:clamp(24px,3.4vw,36px);line-height:1;letter-spacing:-.01em}
+  .metric .num .accent{color:var(--coral)}
+  .metric .lbl{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#a7a2bd;margin-top:10px;line-height:1.4}
+  @media(max-width:720px){.metric{flex:1 1 50%;border-bottom:1px solid rgba(255,255,255,.1)}.metric:nth-child(2n){border-right:none}}
 </style>
 </head>
 <body>
@@ -264,10 +274,19 @@
   </div>
 </div>
 
+<div class="metrics">
+  <div class="wrap metrics-inner">
+    <div class="metric"><div class="num">700<span class="accent"> млн ₽</span></div><div class="lbl">закрытых сделок с приведённых лидов за полгода</div></div>
+    <div class="metric"><div class="num">20 → 60<span class="accent">%</span></div><div class="lbl">рост доли релевантных лидов</div></div>
+    <div class="metric"><div class="num">+30<span class="accent">%</span></div><div class="lbl">конверсия при снижении бюджета на 8%</div></div>
+    <div class="metric"><div class="num">+120<span class="accent">%</span></div><div class="lbl">трафик в контент-проекте</div></div>
+  </div>
+</div>
+
 <section id="about">
   <div class="wrap reveal">
     <div class="sec-head"><span class="sec-num">01</span><h2>О себе</h2></div>
-    <p class="about">Работаю в маркетинге около трёх лет, в основном в <b>B2B</b>: перформанс, лидогенерация и контент. Параллельно собираю <b>ботов, парсеры и автоматизации на нейросетях</b>, поэтому многие процессы закрываю быстрее и без ручной рутины. Мне интересен измеримый результат — гипотеза, тест, цифры. Открыт к ролям в маркетинге, аналитике, e-commerce и AI-продуктах.</p>
+    <p class="about">Работаю в маркетинге около трёх лет, в основном в <b>B2B</b>. Строю системы привлечения <b>с нуля</b> — от лидогенерации до продажи лидов — и много работаю с данными: аналитика, парсинг, изучение конкурентов и новых схем. Параллельно собираю <b>ботов и автоматизации на нейросетях</b>, поэтому рутину закрываю быстрее и без ручной работы. Мне важен измеримый результат — гипотеза, тест, цифры. Открыт к ролям в маркетинге, аналитике, e-commerce и AI-продуктах.</p>
   </div>
 </section>
 
@@ -284,7 +303,7 @@
       <div class="skill-card">
         <h3><span class="dot" style="background:var(--indigo)"></span>Аналитика</h3>
         <div class="tags">
-          <span class="tag">Веб-аналитика</span><span class="tag">Яндекс.Метрика</span><span class="tag">Аналитика воронки</span><span class="tag">A/B-тесты</span><span class="tag">Юнит-экономика</span><span class="tag">Метрики: конверсия, ДРР, ROMI</span><span class="tag">CPC / CPO</span><span class="tag">Excel / Google Sheets</span>
+          <span class="tag">Веб-аналитика</span><span class="tag">Яндекс.Метрика</span><span class="tag">Аналитика воронки</span><span class="tag">Конкурентный анализ</span><span class="tag">Парсинг данных</span><span class="tag">Большие массивы данных</span><span class="tag">A/B-тесты</span><span class="tag">Юнит-экономика</span><span class="tag">Метрики: конверсия, ДРР, ROMI</span><span class="tag">CPC / CPO</span><span class="tag">Excel / Google Sheets</span>
         </div>
       </div>
       <div class="skill-card">
@@ -296,7 +315,7 @@
       <div class="skill-card">
         <h3><span class="dot" style="background:var(--ok)"></span>Управление</h3>
         <div class="tags">
-          <span class="tag">Управление командой</span><span class="tag">Онбординг и обучение</span><span class="tag">Постановка ТЗ</span><span class="tag">Работа с подрядчиками</span><span class="tag">Выстраивание процессов</span>
+          <span class="tag">Управление командой</span><span class="tag">Обучение с нуля</span><span class="tag">Постановка ТЗ</span><span class="tag">Поиск подрядчиков</span><span class="tag">Закупки</span><span class="tag">Учёт расходов</span><span class="tag">Выстраивание процессов</span>
         </div>
       </div>
     </div>
@@ -337,17 +356,19 @@
         <div class="tl-block">
           <span class="tl-tag">Зона ответственности</span>
           <ul class="tl-list plain">
-            <li>B2B-лидогенерация: генерация и продажа лидов агентствам недвижимости</li>
-            <li>Перформанс- и контент-маркетинг, запуск рекламных и контентных кампаний</li>
-            <li>Аналитика воронки в Bitrix24, A/B-тесты, контроль бюджета</li>
-            <li>Руководство небольшой командой: процессы, онбординг, обучение с нуля</li>
+            <li>Построил с нуля полный цикл B2B-лидогенерации: от привлечения до продажи лидов агентствам недвижимости</li>
+            <li>Перформанс и контент: рекламные и контентные кампании, креативные гипотезы и новые заходы</li>
+            <li>Постоянный анализ больших массивов данных и парсинг, конкурентный анализ, поиск новых схем привлечения</li>
+            <li>Аналитика воронки в Bitrix24, A/B-тесты; поиск подрядчиков, закупки, учёт расходов, контроль бюджета</li>
+            <li>Руководство командой: процессы, обучение с нуля, делегирование, онбординг</li>
           </ul>
         </div>
         <div class="tl-block">
           <span class="tl-tag res">Результат</span>
           <ul class="tl-list">
-            <li>Конверсия <b>+30%</b> и трафик <b>+20%</b> за 6 месяцев при снижении бюджета на <b>8%</b></li>
-            <li><b>10+</b> рекламных и <b>10+</b> контентных кампаний</li>
+            <li>Лиды принесли <b>700+ млн ₽</b> закрытых сделок за полгода</li>
+            <li>Доля релевантных лидов выросла с <b>20%</b> до <b>60%</b></li>
+            <li>Конверсия <b>+30%</b>, трафик <b>+20%</b> при снижении бюджета на <b>8%</b></li>
           </ul>
         </div>
       </div>
