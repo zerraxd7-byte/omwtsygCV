@@ -3,451 +3,481 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Егор Горячев · zerraara — AI-автоматизация &amp; performance-маркетинг</title>
-<meta name="description" content="Маркетолог, который не заказывает автоматизацию, а собирает её сам через AI и no-code. n8n, LLM, Telegram-боты, воронки и контент под ключ.">
+<title>Егор Горячев — маркетолог, аналитика и AI-автоматизация</title>
+<meta name="description" content="Егор Горячев — маркетолог с уклоном в перформанс, аналитику и автоматизацию на нейросетях. Москва, английский C1.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --ink:#14110D;
-    --panel:#1C1813;
-    --panel-2:#241F18;
-    --line:#332C22;
-    --amber:#FFB000;      /* phosphor amber — signature */
-    --ember:#FF6B35;      /* hot accent */
-    --live:#6FE7B7;       /* cool "active" pulse, used sparingly */
-    --bone:#ECE3D2;
-    --ash:#8C8272;
-    --ash-dim:#5F584C;
-    --display:'Bricolage Grotesque', sans-serif;
-    --body:'Inter', sans-serif;
-    --mono:'JetBrains Mono', monospace;
+    --paper:#F3F1EA;
+    --paper-2:#ECE9DF;
+    --ink:#16141C;
+    --ink-soft:#4B4753;
+    --muted:#7C7788;
+    --card:#FFFFFF;
+    --line:#E0DCD0;
+    --indigo:#4B3BFF;
+    --indigo-deep:#2E22B8;
+    --coral:#FF6A45;
+    --ok:#1E9E6A;
+    --radius:16px;
+    --maxw:1080px;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
   body{
-    background:var(--ink);color:var(--bone);font-family:var(--body);
-    line-height:1.5;overflow-x:hidden;
-    background-image:radial-gradient(1200px 600px at 78% -8%, rgba(255,176,0,.06), transparent 60%),
-                     radial-gradient(900px 500px at 6% 108%, rgba(255,107,53,.05), transparent 55%);
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Onest',system-ui,sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
   }
-  ::selection{background:var(--amber);color:var(--ink)}
   a{color:inherit;text-decoration:none}
-
-  /* ---- boot overlay ---- */
-  #boot{position:fixed;inset:0;z-index:100;background:var(--ink);
-    display:flex;align-items:center;justify-content:center;
-    font-family:var(--mono);font-size:13px;color:var(--ash);
-    transition:opacity .5s ease, transform .5s ease}
-  #boot .lines{max-width:520px;width:88%;padding:0 20px}
-  #boot .l{opacity:0;white-space:pre-wrap}
-  #boot .l.on{opacity:1}
-  #boot .ok{color:var(--live)}
-  #boot .am{color:var(--amber)}
-  #boot.done{opacity:0;transform:translateY(-14px);pointer-events:none}
-
-  /* ---- top bar ---- */
-  header.bar{position:fixed;top:0;left:0;right:0;z-index:40;
-    display:flex;align-items:center;justify-content:space-between;
-    padding:14px 24px;font-family:var(--mono);font-size:12px;
-    background:linear-gradient(var(--ink),rgba(20,17,13,.4) 70%,transparent);
-    backdrop-filter:blur(2px)}
-  .bar .brand{color:var(--amber);font-weight:700;letter-spacing:.06em}
-  .bar .clock{color:var(--ash);letter-spacing:.04em}
-  .bar nav{display:flex;gap:18px}
-  .bar nav a{color:var(--ash);letter-spacing:.05em;transition:color .2s}
-  .bar nav a:hover,.bar nav a:focus-visible{color:var(--bone)}
-  @media(max-width:720px){.bar nav{display:none}.bar .clock{display:none}}
-
-  .wrap{max-width:1120px;margin:0 auto;padding:0 24px}
-
-  /* ---- hero ---- */
-  .hero{min-height:100vh;display:grid;grid-template-columns:1.15fr .85fr;
-    align-items:center;gap:32px;padding-top:70px}
-  .eyebrow{font-family:var(--mono);font-size:12.5px;letter-spacing:.14em;
-    color:var(--ember);text-transform:uppercase;margin-bottom:22px}
-  .status{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);
-    font-size:12px;letter-spacing:.08em;color:var(--live);
-    border:1px solid var(--line);border-radius:100px;padding:6px 13px;margin-bottom:26px}
-  .dot{width:8px;height:8px;border-radius:50%;background:var(--live);
-    box-shadow:0 0 0 0 rgba(111,231,183,.6);animation:beat 2.4s infinite}
-  @keyframes beat{0%{box-shadow:0 0 0 0 rgba(111,231,183,.55)}70%{box-shadow:0 0 0 10px rgba(111,231,183,0)}100%{box-shadow:0 0 0 0 rgba(111,231,183,0)}}
-  h1{font-family:var(--display);font-weight:800;line-height:.94;
-    font-size:clamp(46px,8.5vw,104px);letter-spacing:-.02em;margin-bottom:8px}
-  h1 .last{color:var(--amber)}
-  .handle{font-family:var(--mono);color:var(--ash);font-size:14px;
-    letter-spacing:.06em;margin-bottom:26px}
-  .lede{font-size:clamp(18px,2.4vw,23px);max-width:30ch;color:var(--bone);margin-bottom:14px}
-  .lede b{color:var(--amber);font-weight:600}
-  .sub{color:var(--ash);max-width:44ch;margin-bottom:32px;font-size:15.5px}
-  .cta{display:flex;gap:14px;flex-wrap:wrap}
-  .btn{font-family:var(--mono);font-size:13px;letter-spacing:.04em;
-    padding:13px 20px;border-radius:10px;border:1px solid var(--line);
-    transition:transform .15s, background .2s, border-color .2s, color .2s;display:inline-flex;gap:8px;align-items:center}
-  .btn.primary{background:var(--amber);color:var(--ink);border-color:var(--amber);font-weight:700}
-  .btn.primary:hover,.btn.primary:focus-visible{background:var(--ember);border-color:var(--ember);transform:translateY(-2px)}
-  .btn.ghost:hover,.btn.ghost:focus-visible{border-color:var(--amber);color:var(--amber);transform:translateY(-2px)}
-
-  /* ---- hero flow graph ---- */
-  .flow{position:relative;height:440px;align-self:center}
-  .flow svg{width:100%;height:100%;overflow:visible}
-  .node-lbl{font-family:var(--mono);font-size:10.5px;fill:var(--ash);letter-spacing:.03em}
-  .node-core{fill:var(--panel-2);stroke:var(--line);stroke-width:1.5}
-  .node-core.hot{stroke:var(--amber)}
-  .wire{fill:none;stroke:var(--line);stroke-width:1.6}
-  .wire.live{stroke:rgba(255,176,0,.35)}
-  @media(max-width:900px){.hero{grid-template-columns:1fr}.flow{display:none}}
-
-  /* ---- sections ---- */
-  section{padding:96px 0;border-top:1px solid var(--line)}
-  .sec-head{font-family:var(--mono);font-size:12.5px;letter-spacing:.14em;
-    color:var(--ember);text-transform:uppercase;margin-bottom:10px}
-  .sec-title{font-family:var(--display);font-weight:800;font-size:clamp(28px,5vw,46px);
-    letter-spacing:-.015em;margin-bottom:34px;line-height:1.02}
-  .reveal{opacity:0;transform:translateY(22px);transition:opacity .6s ease, transform .6s ease}
-  .reveal.in{opacity:1;transform:none}
-
-  .about p{font-size:clamp(17px,2.3vw,21px);max-width:60ch;color:var(--bone)}
-  .about p b{color:var(--amber);font-weight:600}
-  .about .aside{font-family:var(--mono);font-size:13px;color:var(--ash);margin-top:22px;max-width:52ch}
-
-  /* ---- projects grid (nodes) ---- */
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
-  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;
-    padding:22px 22px 20px;position:relative;overflow:hidden;
-    transition:transform .18s, border-color .2s}
-  .card::before{content:"";position:absolute;left:0;top:0;height:100%;width:3px;
-    background:var(--line);transition:background .2s}
-  .card:hover{transform:translateY(-4px);border-color:#4a4030}
-  .card:hover::before{background:var(--amber)}
-  .card .idx{font-family:var(--mono);font-size:11px;color:var(--ash-dim);letter-spacing:.06em}
-  .card h3{font-family:var(--display);font-weight:600;font-size:20px;margin:6px 0 8px;letter-spacing:-.01em}
-  .card p{font-size:14.5px;color:var(--ash);margin-bottom:16px}
-  .tags{display:flex;flex-wrap:wrap;gap:6px}
-  .tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.03em;color:var(--amber);
-    border:1px solid var(--line);border-radius:6px;padding:3px 8px;background:rgba(255,176,0,.04)}
-
-  /* ---- pipeline / experience ---- */
-  .track{position:relative;padding-left:26px}
-  .track::before{content:"";position:absolute;left:5px;top:6px;bottom:6px;width:2px;
-    background:linear-gradient(var(--amber),var(--ember),transparent)}
-  .stop{position:relative;padding-bottom:40px}
-  .stop:last-child{padding-bottom:0}
-  .stop::before{content:"";position:absolute;left:-26px;top:5px;width:12px;height:12px;
-    border-radius:50%;background:var(--ink);border:2px solid var(--amber)}
-  .stop .role{font-family:var(--display);font-weight:600;font-size:20px;letter-spacing:-.01em}
-  .stop .org{font-family:var(--mono);font-size:12.5px;color:var(--ember);letter-spacing:.04em;margin:3px 0 9px}
-  .stop p{color:var(--ash);max-width:60ch;font-size:15px}
-  .stop p b{color:var(--amber);font-weight:600}
-
-  /* ---- stack ---- */
-  .specs{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
-  .spec{border:1px solid var(--line);border-radius:12px;padding:18px;background:var(--panel)}
-  .spec .k{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--ash);text-transform:uppercase;margin-bottom:10px}
-  .spec .v{font-size:15px;color:var(--bone);line-height:1.7}
-  .spec .v span{color:var(--amber)}
-
-  /* ---- soft skills chips ---- */
-  .softs{display:flex;flex-wrap:wrap;gap:10px}
-  .chip{display:inline-flex;font-family:var(--mono);font-size:13px;letter-spacing:.02em;
-    color:var(--bone);border:1px solid var(--line);border-radius:100px;
-    padding:9px 16px;background:var(--panel);transition:border-color .2s,color .2s,transform .15s}
-  .chip:hover{border-color:var(--amber);color:var(--amber);transform:translateY(-2px)}
-  .chip.hot{border-color:var(--amber);color:var(--amber);background:rgba(255,176,0,.05)}
-
-  /* ---- footer / cta ---- */
-  .foot{text-align:center;padding:110px 0 90px}
-  .foot .big{font-family:var(--display);font-weight:800;font-size:clamp(30px,6vw,60px);
-    letter-spacing:-.02em;line-height:1.02;margin-bottom:14px}
-  .foot .big span{color:var(--amber)}
-  .foot .fsub{color:var(--ash);margin-bottom:34px;font-size:16px}
-  .contacts{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:40px}
-  .meta{font-family:var(--mono);font-size:11px;color:var(--ash-dim);letter-spacing:.06em}
-
-  :focus-visible{outline:2px solid var(--amber);outline-offset:3px;border-radius:4px}
-
-  @media(prefers-reduced-motion:reduce){
-    *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
-    .reveal{opacity:1;transform:none}
-    #boot{display:none}
+  ::selection{background:var(--indigo);color:#fff}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+  .mono{font-family:'JetBrains Mono',monospace}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--indigo);font-weight:500;
   }
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(243,241,234,.82);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid transparent;
+    transition:border-color .3s;
+  }
+  nav.scrolled{border-color:var(--line)}
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;height:62px}
+  .brand{display:flex;align-items:center;gap:11px;font-weight:600}
+  .mark{
+    width:34px;height:34px;border-radius:9px;
+    background:var(--ink);color:var(--paper);
+    display:grid;place-items:center;
+    font-family:'Unbounded',sans-serif;font-weight:700;font-size:13px;letter-spacing:.02em;
+  }
+  .nav-links{display:flex;gap:26px;font-size:14px;color:var(--ink-soft)}
+  .nav-links a{position:relative;transition:color .2s}
+  .nav-links a:hover{color:var(--ink)}
+  .nav-links a::after{content:"";position:absolute;left:0;bottom:-4px;width:0;height:2px;background:var(--indigo);transition:width .25s}
+  .nav-links a:hover::after{width:100%}
+  .nav-cta{
+    font-size:13px;font-weight:600;color:#fff;background:var(--ink);
+    padding:9px 16px;border-radius:10px;transition:background .2s,transform .2s;
+  }
+  .nav-cta:hover{background:var(--indigo);transform:translateY(-1px)}
+  @media(max-width:720px){.nav-links{display:none}}
+
+  /* ---------- HERO ---------- */
+  header{padding:88px 0 56px;position:relative}
+  .hero-grid{display:grid;grid-template-columns:1.35fr .65fr;gap:40px;align-items:center}
+  @media(max-width:820px){.hero-grid{grid-template-columns:1fr;gap:32px}}
+  h1{
+    font-family:'Unbounded',sans-serif;font-weight:800;
+    font-size:clamp(42px,7vw,78px);line-height:.98;letter-spacing:-.01em;
+    margin:16px 0 20px;
+  }
+  h1 .flow{color:var(--indigo)}
+  .lede{font-size:clamp(17px,2.2vw,20px);color:var(--ink-soft);max-width:46ch;margin-bottom:26px}
+  .contacts{display:flex;flex-wrap:wrap;gap:10px}
+  .chip-link{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:13.5px;font-weight:500;
+    padding:9px 14px;border-radius:11px;
+    background:var(--card);border:1px solid var(--line);
+    transition:transform .18s,border-color .18s,box-shadow .18s;
+  }
+  .chip-link:hover{transform:translateY(-2px);border-color:var(--indigo);box-shadow:0 8px 22px -14px rgba(75,59,255,.5)}
+  .chip-link svg{width:15px;height:15px;flex:none}
+
+  /* hero side card — the "signature": a tiny automation pipeline */
+  .pipe{
+    background:var(--ink);color:var(--paper);border-radius:var(--radius);
+    padding:22px;box-shadow:0 24px 60px -30px rgba(22,20,28,.6);
+  }
+  .pipe .plabel{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8f8aa8;margin-bottom:16px}
+  .pipe-row{display:flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:13px}
+  .pipe-node{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:9px;padding:9px 11px;flex:1;text-align:center}
+  .pipe-arrow{color:var(--coral);font-weight:700;font-size:15px}
+  .pipe-foot{margin-top:16px;font-size:12.5px;color:#a7a2bd;line-height:1.5}
+  .pipe-foot b{color:var(--paper);font-weight:600}
+
+  /* ---------- FACTS STRIP ---------- */
+  .facts{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--paper-2)}
+  .facts-inner{display:flex;flex-wrap:wrap;gap:0}
+  .fact{flex:1;min-width:160px;padding:20px 24px;border-right:1px solid var(--line)}
+  .fact:last-child{border-right:none}
+  .fact .k{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .fact .v{font-size:16px;font-weight:600;margin-top:3px}
+  @media(max-width:720px){.fact{flex:1 1 50%;border-bottom:1px solid var(--line)}.fact:nth-child(2n){border-right:none}}
+
+  /* ---------- SECTIONS ---------- */
+  section{padding:72px 0}
+  .sec-head{display:flex;align-items:baseline;gap:16px;margin-bottom:34px}
+  .sec-num{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--indigo);font-weight:500}
+  h2{font-family:'Unbounded',sans-serif;font-weight:700;font-size:clamp(24px,3.6vw,34px);letter-spacing:-.01em}
+  .sec-sub{color:var(--muted);font-size:15px;margin-top:-22px;margin-bottom:34px;max-width:60ch}
+
+  /* about */
+  .about{font-size:clamp(18px,2.4vw,22px);line-height:1.6;max-width:62ch;color:var(--ink-soft)}
+  .about b{color:var(--ink);font-weight:600}
+
+  /* skills */
+  .skill-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+  @media(max-width:720px){.skill-grid{grid-template-columns:1fr}}
+  .skill-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px;transition:transform .2s,box-shadow .2s}
+  .skill-card:hover{transform:translateY(-3px);box-shadow:0 18px 40px -28px rgba(22,20,28,.4)}
+  .skill-card h3{font-size:15px;font-weight:700;display:flex;align-items:center;gap:9px;margin-bottom:16px}
+  .dot{width:9px;height:9px;border-radius:50%}
+  .tags{display:flex;flex-wrap:wrap;gap:8px}
+  .tag{font-size:13px;padding:6px 11px;border-radius:8px;background:var(--paper-2);border:1px solid var(--line);color:var(--ink-soft);transition:background .18s,color .18s,border-color .18s}
+  .skill-card:hover .tag{border-color:#d3cec0}
+  .tag:hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+
+  /* timeline */
+  .timeline{position:relative;padding-left:28px}
+  .timeline::before{content:"";position:absolute;left:6px;top:6px;bottom:6px;width:2px;background:linear-gradient(var(--indigo),var(--line))}
+  .tl-item{position:relative;padding:0 0 40px 26px}
+  .tl-item:last-child{padding-bottom:0}
+  .tl-item::before{content:"";position:absolute;left:-28px;top:5px;width:14px;height:14px;border-radius:50%;background:var(--paper);border:3px solid var(--indigo)}
+  .tl-item.now::before{background:var(--indigo);box-shadow:0 0 0 4px rgba(75,59,255,.16)}
+  .tl-period{font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--indigo);font-weight:500;letter-spacing:.02em}
+  .tl-role{font-size:19px;font-weight:700;margin:6px 0 2px}
+  .tl-org{font-size:14px;color:var(--muted);margin-bottom:14px}
+  .tl-org .badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--indigo-deep);background:rgba(75,59,255,.09);border-radius:6px;padding:2px 7px;margin-left:8px;vertical-align:middle}
+  .tl-list{list-style:none;display:flex;flex-direction:column;gap:9px}
+  .tl-list li{position:relative;padding-left:22px;font-size:15px;color:var(--ink-soft)}
+  .tl-list li::before{content:"→";position:absolute;left:0;top:0;color:var(--coral);font-family:'JetBrains Mono',monospace;font-weight:700}
+  .tl-list b{color:var(--ink);font-weight:600}
+  .tl-block{margin-bottom:16px}
+  .tl-block:last-child{margin-bottom:0}
+  .tl-tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;color:var(--muted);margin-bottom:9px;padding-bottom:4px;border-bottom:1px solid var(--line)}
+  .tl-tag.res{color:var(--indigo-deep);border-color:rgba(75,59,255,.25)}
+  .tl-list.plain li::before{content:"·";color:var(--muted);font-size:20px;top:-3px}
+
+  /* projects */
+  .proj-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  @media(max-width:820px){.proj-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:560px){.proj-grid{grid-template-columns:1fr}}
+  .proj{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;transition:transform .2s,box-shadow .2s,border-color .2s;position:relative;overflow:hidden}
+  .proj:hover{transform:translateY(-4px);box-shadow:0 22px 44px -30px rgba(22,20,28,.5);border-color:var(--indigo)}
+  .proj .pi{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:.1em}
+  .proj h4{font-size:16px;font-weight:700;margin:10px 0 8px}
+  .proj p{font-size:13.5px;color:var(--ink-soft);line-height:1.5}
+  .proj .stack{margin-top:14px;display:flex;flex-wrap:wrap;gap:6px}
+  .proj .stack span{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--indigo-deep);background:rgba(75,59,255,.08);padding:3px 7px;border-radius:6px}
+
+  /* education */
+  .edu{display:flex;gap:20px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:26px}
+  .edu .cap{width:46px;height:46px;border-radius:12px;background:var(--ink);color:var(--paper);display:grid;place-items:center;flex:none}
+  .edu h4{font-size:17px;font-weight:700}
+  .edu p{color:var(--muted);font-size:14px;margin-top:4px}
+  .edu .lang{margin-top:12px;display:inline-flex;gap:8px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ok)}
+
+  /* contact */
+  .contact{background:var(--ink);color:var(--paper);border-radius:24px;padding:clamp(32px,6vw,60px);text-align:center;position:relative;overflow:hidden}
+  .contact::after{content:"→";position:absolute;font-family:'Unbounded',sans-serif;font-weight:800;font-size:300px;color:rgba(255,255,255,.03);right:-30px;bottom:-90px;line-height:1}
+  .contact h2{color:var(--paper);margin-bottom:14px}
+  .contact p{color:#b3aec9;max-width:44ch;margin:0 auto 28px;font-size:16px}
+  .contact .contacts{justify-content:center;position:relative;z-index:1}
+  .contact .chip-link{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.14);color:var(--paper)}
+  .contact .chip-link:hover{background:var(--paper);color:var(--ink);border-color:var(--paper)}
+
+  footer{padding:36px 0;text-align:center;color:var(--muted);font-size:13px;font-family:'JetBrains Mono',monospace}
+
+  /* reveal */
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s cubic-bezier(.2,.7,.2,1),transform .6s cubic-bezier(.2,.7,.2,1)}
+  .reveal.in{opacity:1;transform:none}
+  @media(prefers-reduced-motion:reduce){
+    .reveal{opacity:1;transform:none;transition:none}
+    html{scroll-behavior:auto}
+  }
+  :focus-visible{outline:3px solid var(--indigo);outline-offset:3px;border-radius:6px}
 </style>
 </head>
 <body>
 
-<!-- boot -->
-<div id="boot" aria-hidden="true"><div class="lines">
-  <div class="l">$ запуск профиля zerraara …</div>
-  <div class="l"><span class="ok">✔</span> performance-маркетинг &nbsp;<span class="ok">online</span></div>
-  <div class="l"><span class="ok">✔</span> n8n-автоматизации &nbsp;<span class="ok">активны</span></div>
-  <div class="l"><span class="ok">✔</span> AI-модели · claude / gemini &nbsp;<span class="ok">подключены</span></div>
-  <div class="l"><span class="am">▲</span> статус: <span class="am">открыт к работе</span></div>
-</div></div>
+<nav id="nav">
+  <div class="wrap nav-inner">
+    <div class="brand"><span class="mark">ЕГ</span><span>Егор Горячев</span></div>
+    <div class="nav-links">
+      <a href="#about">О себе</a>
+      <a href="#skills">Навыки</a>
+      <a href="#experience">Опыт</a>
+      <a href="#projects">Проекты</a>
+      <a href="#education">Образование</a>
+    </div>
+    <a href="#contact" class="nav-cta">Связаться</a>
+  </div>
+</nav>
 
-<header class="bar">
-  <div class="brand">zerraara.exe</div>
-  <div class="clock" id="clock">--:--:--</div>
-  <nav>
-    <a href="#about">система</a>
-    <a href="#work">проекты</a>
-    <a href="#exp">опыт</a>
-    <a href="#stack">навыки</a>
-    <a href="#contact">связь</a>
-  </nav>
+<header>
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow">Маркетинг × Аналитика × AI-автоматизация</span>
+      <h1>Егор<br>Горячев<span class="flow">.</span></h1>
+      <p class="lede">Маркетолог с уклоном в перформанс, аналитику и автоматизацию на нейросетях. Люблю измеримый результат и убираю рутину кодом.</p>
+      <div class="contacts">
+        <a class="chip-link" href="https://t.me/omwtsyg" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.9 4.3l-3.3 15.6c-.2 1-.9 1.3-1.8.8l-4.9-3.6-2.4 2.3c-.3.3-.5.5-1 .5l.3-4.9 9-8.1c.4-.3-.1-.5-.6-.2L6.1 13.6l-4.8-1.5c-1-.3-1-1 .2-1.5L20.5 3c.9-.3 1.6.2 1.4 1.3z"/></svg>
+          @omwtsyg
+        </a>
+        <a class="chip-link" href="mailto:ezdud@mail.ru">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+          ezdud@mail.ru
+        </a>
+        <a class="chip-link" href="tel:+79636067057">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.6a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.5-1.1a2 2 0 0 1 2.1-.5c.8.3 1.7.5 2.6.6a2 2 0 0 1 1.7 2z"/></svg>
+          +7 963 606 70 57
+        </a>
+        <a class="chip-link" href="https://github.com/zerraxd7-byte" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2A10 10 0 0 0 8.8 21.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.6.3-1.1.6-1.4-2.2-.2-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.3-.4-1.3.1-2.7 0 0 .8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .5 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.9-2.4 4.8-4.6 5 .3.3.7 1 .7 2v3c0 .3.2.6.7.5A10 10 0 0 0 12 2z"/></svg>
+          zerraxd7-byte
+        </a>
+      </div>
+    </div>
+
+    <div class="pipe" aria-hidden="true">
+      <div class="plabel">// как я работаю</div>
+      <div class="pipe-row">
+        <span class="pipe-node">данные</span>
+        <span class="pipe-arrow">→</span>
+        <span class="pipe-node">нейросеть</span>
+        <span class="pipe-arrow">→</span>
+        <span class="pipe-node">результат</span>
+      </div>
+      <div class="pipe-foot">Маркетинг с цифрами и аналитикой, плюс <b>боты, парсеры и n8n</b>, чтобы рутина не отнимала время.</div>
+    </div>
+  </div>
 </header>
 
-<main class="wrap">
+<div class="facts">
+  <div class="wrap facts-inner">
+    <div class="fact"><div class="k">Локация</div><div class="v">Москва</div></div>
+    <div class="fact"><div class="k">Опыт</div><div class="v">~3 года в маркетинге</div></div>
+    <div class="fact"><div class="k">Английский</div><div class="v">C1</div></div>
+  </div>
+</div>
 
-  <!-- HERO -->
-  <section class="hero" style="border-top:none">
-    <div class="hero-txt">
-      <div class="eyebrow">// performance-маркетинг × ai-автоматизация</div>
-      <div class="status"><span class="dot"></span>В СЕТИ — принимаю задачи</div>
-      <h1>ЕГОР<br><span class="last">ГОРЯЧЕВ</span></h1>
-      <div class="handle">@omwtsyg · МГУ ВШБ, менеджмент</div>
-      <p class="lede">Маркетолог, который не <b>заказывает</b> автоматизацию, а <b>собирает её сам</b>.</p>
-      <p class="sub">Гоню трафик и лиды на дорогой продукт — и тут же собираю ботов, воронки и контент-конвейеры, которые делают это за меня. От задачи до работающего результата.</p>
-      <div class="cta">
-        <a class="btn primary" href="https://t.me/omwtsyg">→ Написать в Telegram</a>
-        <a class="btn ghost" href="#work">Смотреть проекты ↓</a>
+<section id="about">
+  <div class="wrap reveal">
+    <div class="sec-head"><span class="sec-num">01</span><h2>О себе</h2></div>
+    <p class="about">Работаю в маркетинге около трёх лет, в основном в <b>B2B</b>: перформанс, лидогенерация и контент. Параллельно собираю <b>ботов, парсеры и автоматизации на нейросетях</b>, поэтому многие процессы закрываю быстрее и без ручной рутины. Мне интересен измеримый результат — гипотеза, тест, цифры. Открыт к ролям в маркетинге, аналитике, e-commerce и AI-продуктах.</p>
+  </div>
+</section>
+
+<section id="skills" style="padding-top:0">
+  <div class="wrap reveal">
+    <div class="sec-head"><span class="sec-num">02</span><h2>Навыки</h2></div>
+    <div class="skill-grid">
+      <div class="skill-card">
+        <h3><span class="dot" style="background:var(--coral)"></span>Маркетинг</h3>
+        <div class="tags">
+          <span class="tag">Performance-маркетинг</span><span class="tag">Контекстная реклама</span><span class="tag">Таргетированная реклама</span><span class="tag">SEO</span><span class="tag">SMM</span><span class="tag">Контент-маркетинг</span><span class="tag">B2B-лидогенерация</span><span class="tag">Инфлюенсеры и посевы</span><span class="tag">Органика (УБТ)</span><span class="tag">Копирайтинг</span><span class="tag">Съёмка Reels</span><span class="tag">Контент-план</span><span class="tag">Промо</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <h3><span class="dot" style="background:var(--indigo)"></span>Аналитика</h3>
+        <div class="tags">
+          <span class="tag">Веб-аналитика</span><span class="tag">Яндекс.Метрика</span><span class="tag">Аналитика воронки</span><span class="tag">A/B-тесты</span><span class="tag">Юнит-экономика</span><span class="tag">Метрики: конверсия, ДРР, ROMI</span><span class="tag">CPC / CPO</span><span class="tag">Excel / Google Sheets</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <h3><span class="dot" style="background:var(--indigo-deep)"></span>AI &amp; Автоматизация</h3>
+        <div class="tags">
+          <span class="tag">Нейросети (Claude, Gemini)</span><span class="tag">n8n</span><span class="tag">API-интеграции</span><span class="tag">Парсинг (Playwright, BeautifulSoup)</span><span class="tag">Python</span><span class="tag">Telegram-боты</span><span class="tag">React / Vite</span><span class="tag">Лендинги и веб-инструменты</span><span class="tag">Bitrix24</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <h3><span class="dot" style="background:var(--ok)"></span>Управление</h3>
+        <div class="tags">
+          <span class="tag">Управление командой</span><span class="tag">Онбординг и обучение</span><span class="tag">Постановка ТЗ</span><span class="tag">Работа с подрядчиками</span><span class="tag">Выстраивание процессов</span>
+        </div>
       </div>
     </div>
+  </div>
+</section>
 
-    <!-- signature: career as an n8n-style flow -->
-    <div class="flow" aria-hidden="true">
-      <svg viewBox="0 0 420 440" role="img">
-        <defs>
-          <circle id="pulse" r="3.4" fill="#FFB000"/>
-        </defs>
-        <!-- wires -->
-        <path class="wire live" d="M70,70 C150,70 150,160 210,160"/>
-        <path class="wire live" d="M70,70 C150,70 150,300 210,300"/>
-        <path class="wire live" d="M210,160 C280,160 280,220 350,220"/>
-        <path class="wire live" d="M210,300 C280,300 280,220 350,220"/>
-        <path class="wire" d="M70,70 C120,70 120,400 210,400"/>
-        <path class="wire live" d="M210,400 C300,400 300,220 350,220"/>
+<section id="experience" style="padding-top:0">
+  <div class="wrap reveal">
+    <div class="sec-head"><span class="sec-num">03</span><h2>Опыт работы</h2></div>
+    <p class="sec-sub">В хронологическом порядке — от первых проектов до текущих.</p>
+    <div class="timeline">
 
-        <!-- traveling pulses -->
-        <use href="#pulse"><animateMotion dur="2.6s" repeatCount="indefinite" path="M70,70 C150,70 150,160 210,160"/></use>
-        <use href="#pulse" fill="#FF6B35"><animateMotion dur="3.1s" begin="0.6s" repeatCount="indefinite" path="M70,70 C150,70 150,300 210,300"/></use>
-        <use href="#pulse"><animateMotion dur="2.2s" begin="1.1s" repeatCount="indefinite" path="M210,160 C280,160 280,220 350,220"/></use>
-        <use href="#pulse" fill="#6FE7B7"><animateMotion dur="2.8s" begin="0.3s" repeatCount="indefinite" path="M210,300 C280,300 280,220 350,220"/></use>
-
-        <!-- nodes -->
-        <g>
-          <rect class="node-core hot" x="34" y="52" width="72" height="36" rx="9"/>
-          <text class="node-lbl" x="70" y="74" text-anchor="middle">ТРАФИК</text>
-        </g>
-        <g>
-          <rect class="node-core" x="176" y="142" width="72" height="36" rx="9"/>
-          <text class="node-lbl" x="212" y="164" text-anchor="middle">СБОР</text>
-        </g>
-        <g>
-          <rect class="node-core" x="176" y="282" width="72" height="36" rx="9"/>
-          <text class="node-lbl" x="212" y="304" text-anchor="middle">AI</text>
-        </g>
-        <g>
-          <rect class="node-core" x="176" y="382" width="72" height="36" rx="9"/>
-          <text class="node-lbl" x="212" y="404" text-anchor="middle">БОТ</text>
-        </g>
-        <g>
-          <rect class="node-core hot" x="316" y="202" width="72" height="36" rx="9"/>
-          <text class="node-lbl" x="352" y="224" text-anchor="middle">ЛИД → CRM</text>
-        </g>
-      </svg>
-    </div>
-  </section>
-
-  <!-- ABOUT -->
-  <section id="about" class="about">
-    <div class="sec-head reveal">// система</div>
-    <h2 class="sec-title reveal">Один человек — целый отдел</h2>
-    <p class="reveal">~3 года в маркетинге, ядро — <b>B2B-лидогенерация</b>: генерирую и продаю лиды агентствам недвижимости. Веду контент- и performance-маркетинг и параллельно разбираю рутину на части, собирая под неё автоматизации: <b>Telegram-боты, n8n-сценарии, сбор данных, связки с AI</b>. В итоге на выходе не «кампания» и не разовый инструмент, а работающая система, где трафик, квалификация лида и CRM соединены в один поток.</p>
-    <p class="aside reveal">Люблю доводить сложное до рабочего результата. Без «сделаю потом».</p>
-  </section>
-
-  <!-- WORK -->
-  <section id="work">
-    <div class="sec-head reveal">// собрано</div>
-    <h2 class="sec-title reveal">Что уже собрано и работает</h2>
-    <div class="grid">
-
-      <div class="card reveal">
-        <div class="idx">01 / factory</div>
-        <h3>Видео-фабрика</h3>
-        <p>Конвейер коротких видео на n8n: тема → сценарий → озвучка → сборка ролика → выгрузка. Reels/TikTok без монтажёра.</p>
-        <div class="tags"><span class="tag">n8n</span><span class="tag">Groq</span><span class="tag">JSON2Video</span></div>
+      <div class="tl-item">
+        <div class="tl-period">Июнь 2023 — январь 2024</div>
+        <div class="tl-role">Контент-маркетолог</div>
+        <div class="tl-org">Крипто-проект</div>
+        <div class="tl-block">
+          <span class="tl-tag">Зона ответственности</span>
+          <ul class="tl-list plain">
+            <li>Контент-маркетинг: контент-план и производство контента</li>
+            <li>Посевы у инфлюенсеров и работа с органическим трафиком (УБТ)</li>
+            <li>Операционка: составление ТЗ, постановка и контроль задач, онбординг новых людей</li>
+          </ul>
+        </div>
+        <div class="tl-block">
+          <span class="tl-tag res">Результат</span>
+          <ul class="tl-list">
+            <li>Трафик <b>+120%</b> и охваты <b>+70%</b> за полгода</li>
+            <li><b>100+</b> единиц контента по контент-плану</li>
+          </ul>
+        </div>
       </div>
 
-      <div class="card reveal">
-        <div class="idx">02 / leadgen</div>
-        <h3>AI лид-финдер</h3>
-        <p>Веб-приложение: находит потенциальных клиентов, квалифицирует их через LLM и отдаёт готовый список под обзвон.</p>
-        <div class="tags"><span class="tag">AI</span><span class="tag">веб-инструмент</span></div>
+      <div class="tl-item now">
+        <div class="tl-period">Январь 2024 — настоящее время</div>
+        <div class="tl-role">Маркетолог</div>
+        <div class="tl-org">Агентство недвижимости <span class="badge">B2B</span></div>
+        <div class="tl-block">
+          <span class="tl-tag">Зона ответственности</span>
+          <ul class="tl-list plain">
+            <li>B2B-лидогенерация: генерация и продажа лидов агентствам недвижимости</li>
+            <li>Перформанс- и контент-маркетинг, запуск рекламных и контентных кампаний</li>
+            <li>Аналитика воронки в Bitrix24, A/B-тесты, контроль бюджета</li>
+            <li>Руководство небольшой командой: процессы, онбординг, обучение с нуля</li>
+          </ul>
+        </div>
+        <div class="tl-block">
+          <span class="tl-tag res">Результат</span>
+          <ul class="tl-list">
+            <li>Конверсия <b>+30%</b> и трафик <b>+20%</b> за 6 месяцев при снижении бюджета на <b>8%</b></li>
+            <li><b>10+</b> рекламных и <b>10+</b> контентных кампаний</li>
+          </ul>
+        </div>
       </div>
 
-      <div class="card reveal">
-        <div class="idx">03 / pipeline</div>
-        <h3>Avito → Bitrix24</h3>
-        <p>Ловит нужные объявления и заявки с Avito и льёт лиды напрямую в воронку CRM. Работает 24/7.</p>
-        <div class="tags"><span class="tag">автоматизация</span><span class="tag">Bitrix24</span><span class="tag">24/7</span></div>
-      </div>
-
-      <div class="card reveal">
-        <div class="idx">04 / sales</div>
-        <h3>FunPay / Playerok агент</h3>
-        <p>Автопродавец цифровых товаров: сам отвечает покупателю, выдаёт заказ и закрывает сделку без участия человека.</p>
-        <div class="tags"><span class="tag">автоматизация</span><span class="tag">FunPay Pulse</span></div>
-      </div>
-
-      <div class="card reveal">
-        <div class="idx">05 / payments</div>
-        <h3>Эзотерик-бот</h3>
-        <p>Telegram-бот с приёмом оплаты через Telegram Stars — от контента до монетизации внутри мессенджера.</p>
-        <div class="tags"><span class="tag">Telegram</span><span class="tag">оплата Stars</span></div>
-      </div>
-
-      <div class="card reveal">
-        <div class="idx">06 / monitor</div>
-        <h3>ЕМИАС слот-монитор</h3>
-        <p>Мониторит окна записи к врачу и мгновенно пингует в Telegram, как только освобождается слот.</p>
-        <div class="tags"><span class="tag">мониторинг</span><span class="tag">Telegram</span></div>
-      </div>
-
-      <div class="card reveal">
-        <div class="idx">07 / advisor</div>
-        <h3>«Кожа» — скинкер-бот</h3>
-        <p>Бот-консультант: по вводным подбирает уход и разбирает состав средств. Диалог на базе AI.</p>
-        <div class="tags"><span class="tag">AI</span><span class="tag">Telegram</span></div>
-      </div>
-
-      <div class="card reveal">
-        <div class="idx">08 / affiliate</div>
-        <h3>WB-партнёрка</h3>
-        <p>Автоматизация партнёрской программы Wildberries: сбор, обработка и выгрузка данных без ручного труда.</p>
-        <div class="tags"><span class="tag">автоматизация</span><span class="tag">сбор данных</span></div>
+      <div class="tl-item now">
+        <div class="tl-period">2023 — настоящее время</div>
+        <div class="tl-role">Автоматизация и разработка</div>
+        <div class="tl-org">Фриланс</div>
+        <div class="tl-block">
+          <span class="tl-tag">Зона ответственности</span>
+          <ul class="tl-list plain">
+            <li>Telegram-боты, воркфлоу в n8n, парсинг (Playwright, BeautifulSoup)</li>
+            <li>Интеграции с Bitrix24, лендинги и веб-инструменты (React / Vite)</li>
+            <li>Решения на нейросетях (Claude, Gemini) для контента, аналитики и рутины</li>
+          </ul>
+        </div>
+        <div class="tl-block">
+          <span class="tl-tag res">Результат</span>
+          <ul class="tl-list">
+            <li>Готовые продукты: боты, парсеры и автоматизации, закрывающие ручную рутину</li>
+            <li>Проекты доведены от идеи до внедрения и реальных пользователей</li>
+          </ul>
+        </div>
       </div>
 
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- EXPERIENCE -->
-  <section id="exp">
-    <div class="sec-head reveal">// воронка</div>
-    <h2 class="sec-title reveal">Опыт</h2>
-    <div class="track">
-      <div class="stop reveal">
-        <div class="role">Маркетолог · недвижимость, B2B-лидогенерация</div>
-        <div class="org">Янв 2024 — наст. время · Москва</div>
-        <p>Генерирую и продаю лиды агентствам недвижимости (B2B): контент- и performance-маркетинг под продажи, аналитика воронки в Bitrix24. Собрал новую систему генерации лидов — конверсия <b>+30%</b>. Трафик на сайт <b>+20%</b> за 6 месяцев, <b>10+</b> рекламных и <b>10+</b> контентных кампаний, бюджет <b>−8%</b> без потери эффективности.</p>
+<section id="projects" style="padding-top:0">
+  <div class="wrap reveal">
+    <div class="sec-head"><span class="sec-num">04</span><h2>Проекты</h2></div>
+    <p class="sec-sub">Собственные боты, интеграции и инструменты — там, где ручную работу можно отдать коду.</p>
+    <div class="proj-grid">
+      <div class="proj">
+        <div class="pi">01</div>
+        <h4>AI лид-финдер</h4>
+        <p>Парсит площадки, квалифицирует лиды через нейросеть и выгружает их в CRM.</p>
+        <div class="stack"><span>Python</span><span>LLM API</span><span>Bitrix24</span></div>
       </div>
-      <div class="stop reveal">
-        <div class="role">Руководство командой · процессы и обучение</div>
-        <div class="org">небольшой отдел · онбординг</div>
-        <p>Управлял небольшим отделом: выстраивал процессы, курировал людей по задачам, обучал с нуля и полностью вводил новичков в работу — от первого дня до самостоятельности. Не просто раздаю таски, а довожу человека до результата.</p>
+      <div class="proj">
+        <div class="pi">02</div>
+        <h4>Avito → Bitrix24 бот</h4>
+        <p>Автоматически собирает заявки с Авито и передаёт их в CRM без ручного переноса.</p>
+        <div class="stack"><span>Парсинг</span><span>Bitrix24</span></div>
       </div>
-      <div class="stop reveal">
-        <div class="role">Видео-продакшн · Reels под маркетинг</div>
-        <div class="org">контент своими руками</div>
-        <p>Сам снимал и собирал вертикальные видео и Reels под маркетинговые задачи — от идеи до готового ролика. Понимаю продакшн изнутри, поэтому и автоматизирую его осознанно (см. видео-фабрику), а не наугад.</p>
+      <div class="proj">
+        <div class="pi">03</div>
+        <h4>Агент продаж</h4>
+        <p>Автоматизация продаж цифровых товаров на FunPay и Playerok.</p>
+        <div class="stack"><span>Python</span><span>Автоматизация</span></div>
       </div>
-      <div class="stop reveal">
-        <div class="role">Контент-маркетолог · крипто-проект</div>
-        <div class="org">Июн 2023 — Янв 2024</div>
-        <p>Контент-стратегия и соцсети: трафик проекта <b>+120%</b> за первые полгода, охваты <b>+70%</b>. Создал <b>100+</b> контент-единиц, вёл контент-план и посевы через лидеров мнений. Работал с УБТ — масштабная органика через контент, без бюджета на закуп.</p>
+      <div class="proj">
+        <div class="pi">04</div>
+        <h4>Контент-конвейер для видео</h4>
+        <p>Пайплайн для автоматизированного производства коротких роликов.</p>
+        <div class="stack"><span>n8n</span><span>Нейросети</span></div>
       </div>
-      <div class="stop reveal">
-        <div class="role">Фриланс · автоматизация под ключ</div>
-        <div class="org">Telegram-боты · n8n · AI-интеграции</div>
-        <p>Полный цикл: снял задачу → спроектировал → собрал → запустил → передал заказчику. Работаю на связке n8n + AI-модели (Claude, Gemini) + готовые интеграции. На выходе — рабочая система, а не «демо».</p>
+      <div class="proj">
+        <div class="pi">05</div>
+        <h4>Бот записи и напоминаний</h4>
+        <p>Запись клиентов и автоматические напоминания о встречах.</p>
+        <div class="stack"><span>Telegram</span><span>Автоматизация</span></div>
       </div>
-      <div class="stop reveal">
-        <div class="role">Бакалавриат · Менеджмент</div>
-        <div class="org">МГУ им. Ломоносова · Высшая школа бизнеса</div>
-        <p>Учебная база в оценке бизнеса (DCF, WACC, модель Гордона) и цифровизации процессов. Плюс к прикладной части — понимание экономики за автоматизацией.</p>
+      <div class="proj">
+        <div class="pi">06</div>
+        <h4>Лендинги и веб-инструменты</h4>
+        <p>Посадочные страницы и небольшие веб-инструменты под маркетинговые задачи.</p>
+        <div class="stack"><span>React</span><span>Vite</span></div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- STACK -->
-  <section id="stack">
-    <div class="sec-head reveal">// инструменты</div>
-    <h2 class="sec-title reveal">Чем работаю</h2>
-    <div class="specs">
-      <div class="spec reveal"><div class="k">Автоматизация</div><div class="v"><span>n8n</span> · сценарии · интеграции сервисов</div></div>
-      <div class="spec reveal"><div class="k">AI / нейросети</div><div class="v"><span>Claude</span> · Gemini · Groq · промптинг · AI-агенты</div></div>
-      <div class="spec reveal"><div class="k">Маркетинг</div><div class="v"><span>Performance</span> · лидоген · SMM · аналитика воронки</div></div>
-      <div class="spec reveal"><div class="k">Контент</div><div class="v"><span>Reels / видео</span> · продакшн своими руками</div></div>
-      <div class="spec reveal"><div class="k">CRM / данные</div><div class="v"><span>Bitrix24</span> · парсинг · аналитика · выгрузка</div></div>
-      <div class="spec reveal"><div class="k">Команда</div><div class="v"><span>Управление отделом</span> · онбординг · обучение процессам</div></div>
-      <div class="spec reveal"><div class="k">Продукт</div><div class="v"><span>Боты и веб-инструменты</span> под конкретную задачу</div></div>
+<section id="education" style="padding-top:0">
+  <div class="wrap reveal">
+    <div class="sec-head"><span class="sec-num">05</span><h2>Образование</h2></div>
+    <div class="edu">
+      <div class="cap" aria-hidden="true">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c0 1 2.7 3 6 3s6-2 6-3v-5"/></svg>
+      </div>
+      <div>
+        <h4>Бакалавриат — «Менеджмент»</h4>
+        <p>Высшая школа бизнеса, МГУ им. М. В. Ломоносова</p>
+        <p style="margin-top:8px;color:var(--ink-soft)">База по бизнесу, экономике, финансам и управлению процессами.</p>
+        <span class="lang">EN · английский C1</span>
+      </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- SOFT SKILLS -->
-  <section id="soft">
-    <div class="sec-head reveal">// софт-скиллы</div>
-    <h2 class="sec-title reveal">Как со мной работать</h2>
-    <div class="softs reveal">
-      <span class="chip hot">Английский · C1</span>
-      <span class="chip hot">Готов пробовать новое</span>
-      <span class="chip">Управление людьми</span>
-      <span class="chip">Обучение и онбординг</span>
-      <span class="chip">Самостоятельность</span>
-      <span class="chip">Ответственность за результат</span>
-      <span class="chip">Коммуникация</span>
-      <span class="chip">Работа в команде</span>
-      <span class="chip">Быстрая обучаемость</span>
-      <span class="chip">Системное мышление</span>
-      <span class="chip">Внимание к деталям</span>
+<section id="contact" style="padding-top:0">
+  <div class="wrap reveal">
+    <div class="contact">
+      <h2>Связаться со мной</h2>
+      <p>Открыт к предложениям в маркетинге, аналитике, e-commerce и AI-продуктах. Напишите — отвечу быстро.</p>
+      <div class="contacts">
+        <a class="chip-link" href="https://t.me/omwtsyg" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.9 4.3l-3.3 15.6c-.2 1-.9 1.3-1.8.8l-4.9-3.6-2.4 2.3c-.3.3-.5.5-1 .5l.3-4.9 9-8.1c.4-.3-.1-.5-.6-.2L6.1 13.6l-4.8-1.5c-1-.3-1-1 .2-1.5L20.5 3c.9-.3 1.6.2 1.4 1.3z"/></svg>
+          Telegram @omwtsyg
+        </a>
+        <a class="chip-link" href="mailto:ezdud@mail.ru">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+          ezdud@mail.ru
+        </a>
+        <a class="chip-link" href="tel:+79636067057">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.6a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.5-1.1a2 2 0 0 1 2.1-.5c.8.3 1.7.5 2.6.6a2 2 0 0 1 1.7 2z"/></svg>
+          +7 963 606 70 57
+        </a>
+        <a class="chip-link" href="https://github.com/zerraxd7-byte" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2A10 10 0 0 0 8.8 21.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.6.3-1.1.6-1.4-2.2-.2-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.3-.4-1.3.1-2.7 0 0 .8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .5 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.9-2.4 4.8-4.6 5 .3.3.7 1 .7 2v3c0 .3.2.6.7.5A10 10 0 0 0 12 2z"/></svg>
+          GitHub
+        </a>
+      </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- CONTACT -->
-  <section id="contact" class="foot" style="border-top:1px solid var(--line)">
-    <div class="big reveal">Есть рутина, которую <span>жалко делать руками?</span></div>
-    <p class="fsub reveal">Соберу под неё систему. Или просто возьмусь за вашу задачу по маркетингу и автоматизации.</p>
-    <div class="contacts reveal">
-      <a class="btn primary" href="https://t.me/omwtsyg">Telegram · @omwtsyg</a>
-      <a class="btn ghost" href="mailto:ezdud@mail.ru">ezdud@mail.ru</a>
-      <a class="btn ghost" href="https://github.com/zerraxd7-byte">GitHub</a>
-    </div>
-    <div class="meta reveal">zerraara · Егор Горячев · обновлено: 2026</div>
-  </section>
-
-</main>
+<footer>
+  <div class="wrap">© <span id="yr"></span> Егор Горячев · Москва</div>
+</footer>
 
 <script>
-(function(){
-  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  /* live clock (Москва) */
-  var clock = document.getElementById('clock');
-  function tick(){
-    try{
-      var t = new Date().toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit',second:'2-digit',timeZone:'Europe/Moscow'});
-      clock.textContent = 'MSK ' + t;
-    }catch(e){ clock.textContent = new Date().toLocaleTimeString('ru-RU'); }
-  }
-  tick(); setInterval(tick,1000);
-
-  /* boot sequence */
-  var boot = document.getElementById('boot');
-  if(reduce){ if(boot) boot.remove(); }
-  else if(boot){
-    var lines = boot.querySelectorAll('.l');
-    lines.forEach(function(l,i){ setTimeout(function(){ l.classList.add('on'); }, 180*i + 120); });
-    setTimeout(function(){ boot.classList.add('done'); }, 180*lines.length + 650);
-    setTimeout(function(){ boot.remove(); }, 180*lines.length + 1250);
-  }
-
-  /* scroll reveal */
-  var io = new IntersectionObserver(function(entries){
-    entries.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
-  }, {threshold:.12, rootMargin:'0px 0px -6% 0px'});
-  document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
-})();
+  document.getElementById('yr').textContent = new Date().getFullYear();
+  const nav = document.getElementById('nav');
+  addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 8), {passive:true});
+  const io = new IntersectionObserver((es) => {
+    es.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+  }, {threshold:.12});
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 </script>
 </body>
 </html>
